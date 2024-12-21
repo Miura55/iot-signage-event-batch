@@ -17,7 +17,8 @@ Resources:
       Runtime: python3.12
       Architectures:
       - arm64
-      Handler: src/handlers/publish_message.handler
+      CodeUri: src/handlers/
+      Handler: publish_message.handler
       Role: !GetAtt FunctionRole.Arn
       # This property associates this Lambda function with a scheduled CloudWatch Event. For all available properties, see
       # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#schedule
