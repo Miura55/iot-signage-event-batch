@@ -1,3 +1,4 @@
+import os
 import json
 import http.client
 from datetime import datetime
@@ -21,8 +22,9 @@ def handler(event, context):
         }
     
     # OpenWeatherMap APIを使って天気情報を取得
+    city = os.environ.get("CITY", "Tokyo,JP")
     conn = http.client.HTTPConnection("api.openweathermap.org")
-    conn.request("GET", f"/data/2.5/weather?q=Nagoya,JP&units=metric&appid={api_key}", '', {})
+    conn.request("GET", f"/data/2.5/weather?q={city}&units=metric&appid={api_key}", '', {})
     res = conn.getresponse()
     raw_data = res.read()
     data = json.loads(raw_data.decode("utf-8"))
