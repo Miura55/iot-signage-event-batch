@@ -29,10 +29,12 @@ def handler(event, context):
     raw_data = res.read()
     data = json.loads(raw_data.decode("utf-8"))
     
+    # EventBrdigeから飛ばされるイベントの時刻はUTCなので、JSTに変換
+    event_datetime = datetime.strptime(event["time"], "%Y-%m-%dT%H:%M:%SZ")
+    event_datetime_jst = event_datetime + timedelta(hours=9)
+    
     # IoT CoreにメッセージをPublish
     try:
-        event_datetime = datetime.strptime(event["time"], "%Y-%m-%dT%H:%M:%SZ")
-        event_datetime_jst = event_datetime + timedelta(hours=9)
         publish_payload = {
             "datetime": event_datetime_jst.strftime("%m/%d %H:%M"),
             "weather": data["weather"][0]["main"],
