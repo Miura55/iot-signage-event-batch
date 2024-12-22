@@ -1,7 +1,7 @@
 import os
 import json
 import http.client
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import boto3
 from botocore.exceptions import ClientError
@@ -32,8 +32,9 @@ def handler(event, context):
     # IoT CoreにメッセージをPublish
     try:
         event_datetime = datetime.strptime(event["time"], "%Y-%m-%dT%H:%M:%SZ")
+        event_datetime_jst = event_datetime + timedelta(hours=9)
         publish_payload = {
-            "datetime": event_datetime.strftime("%m/%d %H:%M"),
+            "datetime": event_datetime_jst.strftime("%m/%d %H:%M"),
             "weather": data["weather"][0]["main"],
             "temp": data["main"]["temp"],
             "humidity": data["main"]["humidity"],
